@@ -11,9 +11,9 @@ final class BookTableViewCell: UITableViewCell {
 
     @IBOutlet weak private var booksTitleLabel: UILabel!
     
-    var books: HydraMember! {
+    var hydraMember: HydraMember! {
         didSet {
-            self.booksTitleLabel.text = self.books.title
+            self.booksTitleLabel.text = self.hydraMember.title
         }
     }
     

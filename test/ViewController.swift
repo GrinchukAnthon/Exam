@@ -13,7 +13,8 @@ final class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     private let url = "https://demo.api-platform.com/books"
     
-    private var books: [HydraMember] = []
+    private var hydraMember: [HydraMember] = []
+    private var books: Book!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,21 +24,27 @@ final class ViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         
-        tableView.register(UINib(nibName: "BooksTableViewCell", bundle: nil),
-                           forCellReuseIdentifier: "BooksTableViewCell")
+        tableView.register(UINib(nibName: "BookTableViewCell", bundle: nil),
+                           forCellReuseIdentifier: "BookTableViewCell")
         fetchData()
         
     }
 
     private func fetchData() {
-        AF.request(self.url, method: .get).responseDecodable(of: [HydraMember].self) { [weak self] response in
-            print(response)
-            self?.books = response.value ?? []
-            self?.tableView.reloadData()
-        }
         
+        AF.request(self.url, method: .get).responseDecodable(of: Book.self) {response in
+//            print(response)
+            
+            switch response.result {
+            case .success(let responcse):
+                self.hydraMember = responcse.hydraMember
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+            
+            self.tableView.reloadData()
+        }
     }
-
 }
 
 extension ViewController: UITableViewDelegate {
@@ -50,12 +57,12 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.books.count
+        return self.hydraMember.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as? BookTableViewCell {
-            cell.books = self.books[indexPath.row]
+            cell.hydraMember = self.hydraMember[indexPath.row]
             return cell
         }
         return UITableViewCell()
