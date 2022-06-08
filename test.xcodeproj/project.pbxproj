@@ -17,6 +17,8 @@
 		C95839B5284F54CC00A05E0C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95839B4284F54CC00A05E0C /* Book.swift */; };
 		C95839B8284F54FE00A05E0C /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95839B6284F54FE00A05E0C /* BookTableViewCell.swift */; };
 		C95839B9284F54FE00A05E0C /* BookTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C95839B7284F54FE00A05E0C /* BookTableViewCell.xib */; };
+		C95839BC2850BBAF00A05E0C /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95839BA2850BBAF00A05E0C /* LoadingTableViewCell.swift */; };
+		C95839BD2850BBAF00A05E0C /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C95839BB2850BBAF00A05E0C /* LoadingTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		C95839B4284F54CC00A05E0C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		C95839B6284F54FE00A05E0C /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		C95839B7284F54FE00A05E0C /* BookTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookTableViewCell.xib; sourceTree = "<group>"; };
+		C95839BA2850BBAF00A05E0C /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
+		C95839BB2850BBAF00A05E0C /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,8 @@
 				C95839B4284F54CC00A05E0C /* Book.swift */,
 				C95839B6284F54FE00A05E0C /* BookTableViewCell.swift */,
 				C95839B7284F54FE00A05E0C /* BookTableViewCell.xib */,
+				C95839BA2850BBAF00A05E0C /* LoadingTableViewCell.swift */,
+				C95839BB2850BBAF00A05E0C /* LoadingTableViewCell.xib */,
 				C95839A4284F4B8400A05E0C /* Main.storyboard */,
 				C95839A7284F4B8500A05E0C /* Assets.xcassets */,
 				C95839A9284F4B8500A05E0C /* LaunchScreen.storyboard */,
@@ -161,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C95839B9284F54FE00A05E0C /* BookTableViewCell.xib in Resources */,
+				C95839BD2850BBAF00A05E0C /* LoadingTableViewCell.xib in Resources */,
 				C95839AB284F4B8500A05E0C /* LaunchScreen.storyboard in Resources */,
 				C95839A8284F4B8500A05E0C /* Assets.xcassets in Resources */,
 				C95839A6284F4B8400A05E0C /* Main.storyboard in Resources */,
@@ -218,6 +225,7 @@
 			files = (
 				C95839B5284F54CC00A05E0C /* Book.swift in Sources */,
 				C95839A3284F4B8400A05E0C /* ViewController.swift in Sources */,
+				C95839BC2850BBAF00A05E0C /* LoadingTableViewCell.swift in Sources */,
 				C958399F284F4B8400A05E0C /* AppDelegate.swift in Sources */,
 				C95839B8284F54FE00A05E0C /* BookTableViewCell.swift in Sources */,
 				C95839A1284F4B8400A05E0C /* SceneDelegate.swift in Sources */,

@@ -10,8 +10,11 @@ import Alamofire
 
 final class ViewController: UIViewController {
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
+    
     private let url = "https://demo.api-platform.com/books"
+    private var numberPage = "?page=1"
+    private let itemsPerPage = "&itemsPerPage=41"
     
     private var hydraMember: [HydraMember] = []
     private var books: Book!
@@ -19,21 +22,37 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         
-        tableView.register(UINib(nibName: "BookTableViewCell", bundle: nil),
-                           forCellReuseIdentifier: "BookTableViewCell")
-        fetchData()
+        tableView.register(UINib(nibName: "BookTableViewCell",
+                                 bundle: nil),forCellReuseIdentifier: "BookTableViewCell")
+        fetchData(refresh: true)
         
     }
 
-    private func fetchData() {
+    @objc private func refreshData() {
         
-        AF.request(self.url, method: .get).responseDecodable(of: Book.self) {response in
-//            print(response)
+        fetchData(refresh: true)
+        
+    }
+    
+    private func fetchData(refresh: Bool = false) {
+        
+        if refresh {
+            tableView.refreshControl?.beginRefreshing()
+        }
+        
+        AF.request(self.url + numberPage + itemsPerPage, method: .get).responseDecodable(of: Book.self) {response in
+            
+            if refresh {
+                self.tableView.refreshControl?.endRefreshing()
+            }
             
             switch response.result {
             case .success(let responcse):
@@ -41,6 +60,7 @@ final class ViewController: UIViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            
             
             self.tableView.reloadData()
         }
@@ -61,7 +81,8 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell", for: indexPath) as? BookTableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell",
+                                                    for: indexPath) as? BookTableViewCell {
             cell.hydraMember = self.hydraMember[indexPath.row]
             return cell
         }
