@@ -86,16 +86,24 @@
 				C95839A0284F4B8400A05E0C /* SceneDelegate.swift */,
 				C95839A2284F4B8400A05E0C /* ViewController.swift */,
 				C95839B4284F54CC00A05E0C /* Book.swift */,
-				C95839B6284F54FE00A05E0C /* BookTableViewCell.swift */,
-				C95839B7284F54FE00A05E0C /* BookTableViewCell.xib */,
-				C95839BA2850BBAF00A05E0C /* LoadingTableViewCell.swift */,
-				C95839BB2850BBAF00A05E0C /* LoadingTableViewCell.xib */,
+				C9CB91372855DF6900ABB239 /* Cells */,
 				C95839A4284F4B8400A05E0C /* Main.storyboard */,
 				C95839A7284F4B8500A05E0C /* Assets.xcassets */,
 				C95839A9284F4B8500A05E0C /* LaunchScreen.storyboard */,
 				C95839AC284F4B8500A05E0C /* Info.plist */,
 			);
 			path = test;
+			sourceTree = "<group>";
+		};
+		C9CB91372855DF6900ABB239 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				C95839B6284F54FE00A05E0C /* BookTableViewCell.swift */,
+				C95839B7284F54FE00A05E0C /* BookTableViewCell.xib */,
+				C95839BA2850BBAF00A05E0C /* LoadingTableViewCell.swift */,
+				C95839BB2850BBAF00A05E0C /* LoadingTableViewCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		F3728739A1C9BD407EC23337 /* Frameworks */ = {

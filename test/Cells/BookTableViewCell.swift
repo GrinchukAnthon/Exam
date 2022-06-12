@@ -16,5 +16,4 @@ final class BookTableViewCell: UITableViewCell {
             self.booksTitleLabel.text = self.hydraMember.title
         }
     }
-    
 }

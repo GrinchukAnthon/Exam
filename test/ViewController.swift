@@ -13,17 +13,20 @@ final class ViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
     
     private let url = "https://demo.api-platform.com/books"
-    private var numberPage = "?page=1"
+    private var numberPage = "?page="
+    private var page = 1
     private let itemsPerPage = "&itemsPerPage=41"
     
+    private var isLoading: Bool = false
+    private var isLoaded = false
+    
     private var hydraMember: [HydraMember] = []
-    private var books: Book!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.refreshControl = UIRefreshControl()
-        self.tableView.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -33,36 +36,41 @@ final class ViewController: UIViewController {
         tableView.register(UINib(nibName: "BookTableViewCell",
                                  bundle: nil),forCellReuseIdentifier: "BookTableViewCell")
         fetchData(refresh: true)
-        
     }
 
     @objc private func refreshData() {
-        
         fetchData(refresh: true)
-        
     }
     
     private func fetchData(refresh: Bool = false) {
-        
+        guard !isLoading else { return }
+        isLoaded = true
         if refresh {
             tableView.refreshControl?.beginRefreshing()
+            page = 1
         }
-        
-        AF.request(self.url + numberPage + itemsPerPage, method: .get).responseDecodable(of: Book.self) {response in
+        AF.request(self.url + numberPage + "\(page)" + itemsPerPage, method: .get).responseDecodable(of: Book.self) {response in
             
             if refresh {
                 self.tableView.refreshControl?.endRefreshing()
             }
             
             switch response.result {
-            case .success(let responcse):
-                self.hydraMember = responcse.hydraMember
+            case .success(let response):
+                if refresh {
+                    self.page = 2
+                    self.hydraMember = response.hydraMember
+                } else {
+                    self.page += 1
+                    self.hydraMember.append(contentsOf: response.hydraMember)
+                }
+                self.isLoaded = response.hydraMember.isEmpty
             case .failure(let error):
                 print(error.localizedDescription)
             }
             
-            
             self.tableView.reloadData()
+            self.isLoading = false
         }
     }
 }
@@ -87,5 +95,11 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == hydraMember.count - 2 && !isLoaded {
+            fetchData(refresh: false)
+        }
     }
 }
