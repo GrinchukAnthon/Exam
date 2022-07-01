@@ -6,25 +6,28 @@
 //
 
 import UIKit
-import Alamofire
 
 final class ViewController: UIViewController {
 
     @IBOutlet private weak var tableView: UITableView!
     
-    private let url = "https://demo.api-platform.com/books"
-    private var numberPage = "?page="
     private var page = 1
-    private let itemsPerPage = "&itemsPerPage=41"
     
-    private var isLoading: Bool = false
+    private var isLoading = false
     private var isLoaded = false
+    private var requestsService: RequestServiceInput!
     
     private var hydraMember: [HydraMember] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTableView()
+        requestsService = RequestsService()
+        fetchData(refresh: true)
         
+    }
+ 
+    private func setupTableView() {
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
@@ -35,22 +38,51 @@ final class ViewController: UIViewController {
         
         tableView.register(UINib(nibName: "BookTableViewCell",
                                  bundle: nil),forCellReuseIdentifier: "BookTableViewCell")
-        fetchData(refresh: true)
     }
-
+    
     @objc private func refreshData() {
         fetchData(refresh: true)
     }
+}
+
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
-    private func fetchData(refresh: Bool = false) {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return hydraMember.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell",
+                                                       for: indexPath) as? BookTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.hydraMember = hydraMember[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == hydraMember.count - 2 && !isLoaded {
+            fetchData(refresh: false)
+        }
+    }
+}
+
+private extension ViewController {
+    func fetchData(refresh: Bool = false) {
         guard !isLoading else { return }
+        
         isLoaded = true
+        
         if refresh {
             tableView.refreshControl?.beginRefreshing()
             page = 1
         }
-        AF.request(self.url + numberPage + "\(page)" + itemsPerPage, method: .get).responseDecodable(of: Book.self) {response in
-            
+        
+        requestsService.fetchBooks(pageNumber: page) { response in
             if refresh {
                 self.tableView.refreshControl?.endRefreshing()
             }
@@ -71,35 +103,6 @@ final class ViewController: UIViewController {
             
             self.tableView.reloadData()
             self.isLoading = false
-        }
-    }
-}
-
-extension ViewController: UITableViewDelegate {
-}
-
-extension ViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.hydraMember.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "BookTableViewCell",
-                                                    for: indexPath) as? BookTableViewCell {
-            cell.hydraMember = self.hydraMember[indexPath.row]
-            return cell
-        }
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == hydraMember.count - 2 && !isLoaded {
-            fetchData(refresh: false)
         }
     }
 }
